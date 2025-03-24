@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import vedeeoLogo from '../assets/vedeeo_logo.webp';
 import namsteImage from '../assets/namaste.avif';
 import bed from "../assets/bed.jpg";
@@ -9,6 +9,78 @@ import sideBoard from "../assets/side-board.jpg";
 import phone from "../assets/phone.png";
 
 const BannerComponent = () => {
+  // Create refs for each furniture item
+  const sofaRef = useRef(null);
+  const diningTableRef = useRef(null);
+  const bedRef = useRef(null);
+  const sideBoardRef = useRef(null);
+  const tvStandRef = useRef(null);
+  const phoneRef = useRef(null);
+  
+  // State to track which item is being hovered by the phone
+  const [hoveredItem, setHoveredItem] = useState(null);
+  
+  // Function to check if phone is hovering over an item
+  const checkOverlap = () => {
+    if (!phoneRef.current) return;
+    
+    const phoneRect = phoneRef.current.getBoundingClientRect();
+    const phoneCenter = {
+      x: phoneRect.left + phoneRect.width / 2,
+      y: phoneRect.top + phoneRect.height / 2
+    };
+    
+    // Check each furniture item
+    const items = [
+      { ref: sofaRef, id: 'sofa' },
+      { ref: diningTableRef, id: 'diningTable' },
+      { ref: bedRef, id: 'bed' },
+      { ref: sideBoardRef, id: 'sideBoard' },
+      { ref: tvStandRef, id: 'tvStand' }
+    ];
+    
+    let foundOverlap = false;
+    
+    for (const item of items) {
+      if (!item.ref.current) continue;
+      
+      const itemRect = item.ref.current.getBoundingClientRect();
+      
+      // Check if phone center is within the item's bounds with 30px offset
+      if (
+        phoneCenter.x >= (itemRect.left) &&
+        phoneCenter.x <= (itemRect.right) &&
+        phoneCenter.y >= itemRect.top &&
+        phoneCenter.y <= itemRect.bottom
+      ) {
+        setHoveredItem(item.id);
+        foundOverlap = true;
+        break;
+      }
+    }
+    
+    // If no overlap found, reset hovered item
+    if (!foundOverlap) {
+      setHoveredItem(null);
+    }
+  };
+  
+  // Set up animation frame for continuous checking
+  useEffect(() => {
+    let animationFrameId;
+    
+    const checkFrame = () => {
+      checkOverlap();
+      animationFrameId = requestAnimationFrame(checkFrame);
+    };
+    
+    animationFrameId = requestAnimationFrame(checkFrame);
+    
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
   return (
     <div className="flex w-full h-[450px] bg-white overflow-hidden">
         {/* Left Section - Always visible */}
@@ -41,7 +113,10 @@ const BannerComponent = () => {
         {/* Right Section - Hidden on mobile */}
         <div className="hidden md:flex flex-1 bg-[#0c0cfc] p-4 flex-col justify-center relative">
             {/* Moving Phone Background */}
-            <div className="absolute top-1/2 transform -translate-y-1/2 z-10 animate-phone-slide">
+            <div 
+              ref={phoneRef}
+              className="absolute top-1/2 transform -translate-y-1/2 z-10 animate-phone-slide"
+            >
                 <div className="w-24 sm:w-32 md:w-40 lg:w-48">
                     <img src={phone} alt="Background" className="w-full h-full object-cover opacity-70" />
                 </div>
@@ -51,19 +126,44 @@ const BannerComponent = () => {
             <div className="flex justify-between items-center bg-white px-3 sm:px-4 md:px-6 h-3/5 relative overflow-hidden rounded-xl"> 
                 <div className="relative z-0 flex justify-around items-center w-full">
                     <div className="flex items-center justify-center">
-                        <img src={sofa} alt="Feature 1" className="w-12 sm:w-16 md:w-20 lg:w-28 max-h-3/5" />
+                        <img 
+                          ref={sofaRef}
+                          src={sofa} 
+                          alt="Feature 1" 
+                          className={`w-12 sm:w-16 md:w-20 lg:w-32 max-h-3/5 transition-transform duration-300 ${hoveredItem === 'sofa' ? 'scale-[0.65]' : 'scale-100'}`} 
+                        />
                     </div>
                     <div className="flex items-center justify-center">
-                        <img src={diningTable} alt="Feature 2" className="w-12 sm:w-16 md:w-20 lg:w-28 max-h-3/5" />
+                        <img 
+                          ref={diningTableRef}
+                          src={diningTable} 
+                          alt="Feature 2" 
+                          className={`w-12 sm:w-16 md:w-20 lg:w-32 max-h-3/5 transition-transform duration-300 ${hoveredItem === 'diningTable' ? 'scale-[0.65]' : 'scale-100'}`} 
+                        />
                     </div>
                     <div className="flex items-center justify-center">
-                        <img src={bed} alt="Feature 3" className="w-12 sm:w-16 md:w-20 lg:w-28 max-h-3/5" />
+                        <img 
+                          ref={bedRef}
+                          src={bed} 
+                          alt="Feature 3" 
+                          className={`w-12 sm:w-16 md:w-20 lg:w-32 max-h-3/5 transition-transform duration-300 ${hoveredItem === 'bed' ? 'scale-[0.65]' : 'scale-100'}`} 
+                        />
                     </div>
                     <div className="flex items-center justify-center sm:hidden md:flex">
-                        <img src={sideBoard} alt="Feature 4" className="w-12 sm:w-16 md:w-20 lg:w-28 max-h-3/5" />
+                        <img 
+                          ref={sideBoardRef}
+                          src={sideBoard} 
+                          alt="Feature 4" 
+                          className={`w-12 sm:w-16 md:w-20 lg:w-32 max-h-3/5 transition-transform duration-300 ${hoveredItem === 'sideBoard' ? 'scale-[0.65]' : 'scale-100'}`} 
+                        />
                     </div>
                     <div className="flex items-center justify-center hidden md:flex">
-                        <img src={tvStand} alt="Feature 5" className="w-12 sm:w-16 md:w-20 lg:w-28 max-h-3/5" />
+                        <img 
+                          ref={tvStandRef}
+                          src={tvStand} 
+                          alt="Feature 5" 
+                          className={`w-12 sm:w-16 md:w-20 lg:w-32 max-h-3/5 transition-transform duration-300 ${hoveredItem === 'tvStand' ? 'scale-[0.65]' : 'scale-100'}`} 
+                        />
                     </div>
                 </div>
             </div>
