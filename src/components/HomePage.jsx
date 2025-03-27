@@ -162,7 +162,7 @@ const BannerComponent = () => {
               <p className="text-sm md:text-base text-gray-600 leading-relaxed my-4 md:my-6 lg:my-8">
                   Experience our products from the comfort of your home. Our experts are ready to guide you through our collection and answer all your questions in real-time.
               </p>
-              <a href="https://client.vedeeo.com/?companyUrl=https://www.mayuriinternationals.com"> <button className="bg-[#0c0cfc] border-none text-white w-12 h-12 md:w-auto md:h-auto md:px-3 md:py-2 rounded-full md:rounded-xl font-semibold text-sm md:text-md hover:bg-[#abfb94] hover:text-black transition-all duration-300 ease-in-out flex items-center justify-center">
+              <a href="https://client.vedeeo.com/?companyUrl=https://www.mayuriinternationals.com" target='_blank'> <button className="bg-[#0c0cfc] border-none text-white w-12 h-12 md:w-auto md:h-auto md:px-3 md:py-2 rounded-full md:rounded-xl font-semibold text-sm md:text-md hover:bg-[#a9ff94] hover:text-black transition-all duration-300 ease-in-out flex items-center justify-center">
                   <span className="hidden md:inline">Explore Our Showroom</span>
                   <span className="md:hidden">Call Now</span>
               </button></a>
@@ -171,7 +171,10 @@ const BannerComponent = () => {
       </div>
 
       {/* Right Section */}
-      <div className="hidden md:flex flex-1 bg-[#0c0cfc] p-4 flex-col justify-center relative">
+      <div className="hidden md:flex flex-1 bg-[#ffea4a] p-4 flex-col justify-center relative">
+        <div className="absolute lg:top-6 md:top-5 right-[50%] transform translate-x-[50%] w-[90%] lg:text-base md:text-sm ">
+          <p className="text-black text-center font-bold">Explore our products from the comfort of your homes. See before you purchase and we'll make sure you feel contended.</p>
+        </div>
         <div 
           ref={phoneRef}
           className="absolute top-1/2 transform -translate-y-1/2 z-10"
@@ -239,10 +242,11 @@ const BannerComponent = () => {
             </div>
           </div>
         </div>
-
-        <div className="absolute bottom-4 right-4 sm:right-8 text-xs sm:text-sm text-gray-200 font-medium">
-          Powered By TWIF Technologies Private Limited
-        </div>
+        <a href='https://ionic-s.com/' target='_blank'>
+          <div className="absolute bottom-4 right-4 sm:right-8 text-xs sm:text-sm text-black font-medium">
+            Powered By TWIF Technologies Private Limited
+          </div>
+        </a>
       </div>
     </div>
   );
